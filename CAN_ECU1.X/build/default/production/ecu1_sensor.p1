@@ -1,0 +1,123 @@
+Version 4.0 HI-TECH Software Intermediate Code
+"29 ./main.h
+[; ;./main.h: 29: unsigned short read_adc(unsigned char channel);
+[v _read_adc `(us ~T0 @X0 0 ef1`uc ]
+"27 ecu1_sensor.c
+[; ;ecu1_sensor.c: 27: IndicatorStatus process_indicator()
+[c E52 0 1 2 3 .. ]
+[n E52 . e_ind_off e_ind_left e_ind_right e_ind_hazard  ]
+"47 ./main.h
+[; ;./main.h: 47: unsigned char read_digital_keypad(unsigned char detection_type);
+[v _read_digital_keypad `(uc ~T0 @X0 0 ef1`uc ]
+"11 ecu1_sensor.c
+[; ;ecu1_sensor.c: 11: uint16_t get_rpm(unsigned int value)
+[v _get_rpm `(us ~T0 @X0 1 ef1`ui ]
+"12
+[; ;ecu1_sensor.c: 12: {
+{
+[e :U _get_rpm ]
+"11
+[; ;ecu1_sensor.c: 11: uint16_t get_rpm(unsigned int value)
+[v _value `ui ~T0 @X0 1 r1 ]
+"12
+[; ;ecu1_sensor.c: 12: {
+[f ]
+"15
+[; ;ecu1_sensor.c: 15:     uint16_t rpm = 0;
+[v _rpm `us ~T0 @X0 1 a ]
+[e = _rpm -> -> 0 `i `us ]
+"16
+[; ;ecu1_sensor.c: 16:     rpm = ((read_adc(value) / 10.23) * 60);
+[e = _rpm -> * / -> -> ( _read_adc (1 -> _value `uc `ui `d .10.23 -> -> 60 `i `d `us ]
+"18
+[; ;ecu1_sensor.c: 18:     return rpm;
+[e ) _rpm ]
+[e $UE 1  ]
+"20
+[; ;ecu1_sensor.c: 20: }
+[e :UE 1 ]
+}
+"27
+[; ;ecu1_sensor.c: 27: IndicatorStatus process_indicator()
+[v _process_indicator `(E52 ~T0 @X0 1 ef ]
+"28
+[; ;ecu1_sensor.c: 28: {
+{
+[e :U _process_indicator ]
+[f ]
+"30
+[; ;ecu1_sensor.c: 30:     static IndicatorStatus current_status = e_ind_off;
+[v F87 `E52 ~T0 @X0 1 s current_status ]
+[i F87
+. `E52 0
+]
+"32
+[; ;ecu1_sensor.c: 32:     unsigned char key = read_digital_keypad(1);
+[v _key `uc ~T0 @X0 1 a ]
+[e = _key ( _read_digital_keypad (1 -> -> 1 `i `uc ]
+"34
+[; ;ecu1_sensor.c: 34:     if(key == 0x0E)
+[e $ ! == -> _key `i -> 14 `i 3  ]
+"35
+[; ;ecu1_sensor.c: 35:     {
+{
+"37
+[; ;ecu1_sensor.c: 37:         current_status = e_ind_left;
+[e = F87 . `E52 1 ]
+"38
+[; ;ecu1_sensor.c: 38:     }
+}
+[e $U 4  ]
+"39
+[; ;ecu1_sensor.c: 39:     else if(key == 0x0D)
+[e :U 3 ]
+[e $ ! == -> _key `i -> 13 `i 5  ]
+"40
+[; ;ecu1_sensor.c: 40:     {
+{
+"42
+[; ;ecu1_sensor.c: 42:         current_status = e_ind_right;
+[e = F87 . `E52 2 ]
+"43
+[; ;ecu1_sensor.c: 43:     }
+}
+[e $U 6  ]
+"44
+[; ;ecu1_sensor.c: 44:     else if(key == 0x0B)
+[e :U 5 ]
+[e $ ! == -> _key `i -> 11 `i 7  ]
+"45
+[; ;ecu1_sensor.c: 45:     {
+{
+"47
+[; ;ecu1_sensor.c: 47:         current_status = e_ind_hazard;
+[e = F87 . `E52 3 ]
+"48
+[; ;ecu1_sensor.c: 48:     }
+}
+[e $U 8  ]
+"49
+[; ;ecu1_sensor.c: 49:     else if(key == 0x07)
+[e :U 7 ]
+[e $ ! == -> _key `i -> 7 `i 9  ]
+"50
+[; ;ecu1_sensor.c: 50:     {
+{
+"52
+[; ;ecu1_sensor.c: 52:         current_status = e_ind_off;
+[e = F87 . `E52 0 ]
+"53
+[; ;ecu1_sensor.c: 53:     }
+}
+[e :U 9 ]
+[e :U 8 ]
+[e :U 6 ]
+[e :U 4 ]
+"56
+[; ;ecu1_sensor.c: 56:     return current_status;
+[e ) F87 ]
+[e $UE 2  ]
+"57
+[; ;ecu1_sensor.c: 57: }
+[e :UE 2 ]
+}
